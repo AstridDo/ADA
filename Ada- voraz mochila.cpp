@@ -1,9 +1,9 @@
-
-
 #include <iostream>
 
-int min(int cant_conte, int menor, int* _pesos, int& idx_menor, float* solucion)
+int min(int cant_conte, int* _pesos, int& idx_menor, float* solucion)
 {
+	int menor = INT_MAX;
+
 	for (int i = 0; i < cant_conte; i++)
 	{
 		if (menor > _pesos[i] && solucion[i] == 0)
@@ -24,7 +24,7 @@ void mochila(float capacidad, int cant_conte)
 
 	for (int i = 0; i < cant_conte; i++)
 	{
-		std::cout << "Ingrese pesos de contenedores: ";
+		std::cout << "Ingrese peso del contenedor " << i+1 << ":  ";
 
 		std::cin >> n;
 		_pesos[i] = n;
@@ -38,15 +38,16 @@ void mochila(float capacidad, int cant_conte)
 	}
 
 	int p = cant_conte - 1;
-	int menor = INT_MAX;
+
 	int idx_menor = 0;
 	int low;
 	int hasta = cant_conte;
 	float frac = 0;
 	float total = 0;
+
 	while (capacidad > 0 && hasta > 0)
 	{
-		low = min(cant_conte, menor, _pesos, idx_menor, solucion);
+		low = min(cant_conte, _pesos, idx_menor, solucion);
 		if (capacidad > low)
 		{
 			capacidad = capacidad - low;
@@ -56,8 +57,8 @@ void mochila(float capacidad, int cant_conte)
 		}
 		else
 		{
-			frac = float(capacidad / low);
-			capacidad = capacidad - frac;
+			frac =capacidad / float(low);
+			capacidad = capacidad - frac * float(low);
 			total = total + frac;
 			solucion[idx_menor] = frac;
 			hasta = hasta - 1;
@@ -69,7 +70,7 @@ void mochila(float capacidad, int cant_conte)
 	{
 		std::cout << solucion[i] << "  ";
 	}
-	std::cout << "\n\nTotal de contenedores usados:\n  " << total << "\n\n";
+	std::cout << "\n\nTotal de contenedores usados:\n" << total << "\n\n";
 }
 
 int main()
@@ -81,5 +82,5 @@ int main()
 	int m;
 	std::cin >> m;
 	std::cout << std::endl;
-	mochila(n, 5);
+	mochila(n, m);
 }
